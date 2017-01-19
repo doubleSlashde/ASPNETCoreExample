@@ -1,24 +1,55 @@
 ﻿namespace ASPNETCoreExample {
+   using System.IO;
+
    using Dtos;
 
    using Microsoft.AspNetCore.Builder;
    using Microsoft.AspNetCore.Hosting;
    using Microsoft.Extensions.DependencyInjection;
    using Microsoft.Extensions.Logging;
+   using Microsoft.Extensions.PlatformAbstractions;
 
    using Models;
 
    using Repositories;
 
+   using Swashbuckle.Swagger.Model;
+
+   /// <summary>
+   /// Start class of the API.
+   /// </summary>
    public class Startup {
-      // This method gets called by the runtime. Use this method to add services to the container.
-      // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
+      /// <summary>
+      /// This method gets called by the runtime. Use this method to add services to the container.
+      /// For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
+      /// </summary>
+      /// <param name="services"></param>
       public void ConfigureServices(IServiceCollection services) {
          services.AddSingleton<IFoodRepository, FoodRepository>();
          services.AddMvc();
+
+         // Inject an implementation of ISwaggerProvider with defaulted settings applied
+         services.AddSwaggerGen();
+
+         services.ConfigureSwaggerGen(
+                                      options => {
+                                         options.SingleApiVersion(CreateSwaggerInfo());
+
+                                         // Determine base path for the application.
+                                         string basePath = PlatformServices.Default.Application.ApplicationBasePath;
+
+                                         // Set the comments path for the swagger json and ui.
+                                         string xmlPath = Path.Combine(basePath, "ASPNETCoreExample.xml");
+                                         options.IncludeXmlComments(xmlPath);
+                                      });
       }
 
-      // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+      /// <summary>
+      /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+      /// </summary>
+      /// <param name="app"></param>
+      /// <param name="env"></param>
+      /// <param name="loggerFactory"></param>
       public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) {
          loggerFactory.AddConsole();
 
@@ -33,6 +64,12 @@
          app.UseFileServer();
 
          InitMapper();
+
+         // Enable middleware to serve generated Swagger as a JSON endpoint
+         app.UseSwagger();
+
+         // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+         app.UseSwaggerUi();
       }
 
       private static DefaultFilesOptions CreateDefaultFilesOptions() {
@@ -48,6 +85,20 @@
                                       mapper => {
                                          mapper.CreateMap<FoodItem, FoodDto>().ReverseMap();
                                       });
+      }
+
+      private static Info CreateSwaggerInfo() {
+         return new Info {
+                            Version = "v1",
+                            Title = "ASP.NET Core v1.0 API",
+                            Description = "This is an example of a REST API with ASP.NET Core v1.0",
+                            TermsOfService = "None",
+                            Contact = new Contact {
+                                                     Name = "Jennifer Deigendesch",
+                                                     Email = "jdeigendesch@doubleslash.de",
+                                                     Url = "https://github.com/doubleSlashde/ASPNETCoreExample"
+                                                  }
+                         };
       }
    }
 }
