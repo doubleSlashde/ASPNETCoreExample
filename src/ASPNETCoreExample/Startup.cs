@@ -26,12 +26,28 @@
             app.UseDeveloperExceptionPage();
          }
 
+         app.UseMvc();
+
+         DefaultFilesOptions options = CreateDefaultFilesOptions();
+         app.UseDefaultFiles(options);
+         app.UseFileServer();
+
+         InitMapper();
+      }
+
+      private static DefaultFilesOptions CreateDefaultFilesOptions() {
+         DefaultFilesOptions options = new DefaultFilesOptions();
+         options.DefaultFileNames.Clear();
+         options.DefaultFileNames.Add("MyIndex.html");
+
+         return options;
+      }
+
+      private static void InitMapper() {
          AutoMapper.Mapper.Initialize(
                                       mapper => {
                                          mapper.CreateMap<FoodItem, FoodDto>().ReverseMap();
                                       });
-
-         app.UseMvc();
       }
    }
 }
