@@ -5,6 +5,7 @@
 
    using Microsoft.AspNetCore.Builder;
    using Microsoft.AspNetCore.Hosting;
+   using Microsoft.Extensions.Configuration;
    using Microsoft.Extensions.DependencyInjection;
    using Microsoft.Extensions.Logging;
    using Microsoft.Extensions.PlatformAbstractions;
@@ -20,6 +21,26 @@
    /// </summary>
    public class Startup {
       /// <summary>
+      /// Constructor.
+      /// </summary>
+      /// <param name="env"></param>
+      public Startup(IHostingEnvironment env) {
+         var builder =
+            new ConfigurationBuilder().SetBasePath(env.ContentRootPath)
+                                      .AddJsonFile("appsettings.json")
+                                      .AddEnvironmentVariables();
+
+         this.Configuration = builder.Build();
+      }
+
+      /// <summary>
+      /// App config.
+      /// </summary>
+      private IConfiguration Configuration {
+         get;
+      }
+
+      /// <summary>
       /// This method gets called by the runtime. Use this method to add services to the container.
       /// For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
       /// </summary>
@@ -30,10 +51,9 @@
 
          // Inject an implementation of ISwaggerProvider with defaulted settings applied
          services.AddSwaggerGen();
-
          services.ConfigureSwaggerGen(
                                       options => {
-                                         options.SingleApiVersion(CreateSwaggerInfo());
+                                         options.SingleApiVersion(this.CreateSwaggerInfo());
 
                                          // Determine base path for the application.
                                          string basePath = PlatformServices.Default.Application.ApplicationBasePath;
@@ -54,6 +74,7 @@
          loggerFactory.AddConsole();
 
          if (env.IsDevelopment()) {
+            // Show info about an exception if one occurs only in development environment
             app.UseDeveloperExceptionPage();
          }
 
@@ -65,10 +86,8 @@
 
          InitMapper();
 
-         // Enable middleware to serve generated Swagger as a JSON endpoint
+         // Enable middleware to use swagger ui
          app.UseSwagger();
-
-         // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
          app.UseSwaggerUi();
       }
 
@@ -87,16 +106,15 @@
                                       });
       }
 
-      private static Info CreateSwaggerInfo() {
+      private Info CreateSwaggerInfo() {
          return new Info {
-                            Version = "v1",
-                            Title = "ASP.NET Core v1.0 API",
-                            Description = "This is an example of a REST API with ASP.NET Core v1.0",
-                            TermsOfService = "None",
+                            Version = this.Configuration["version"],
+                            Title = this.Configuration["title"],
+                            Description = this.Configuration["description"],
                             Contact = new Contact {
-                                                     Name = "Jennifer Deigendesch",
-                                                     Email = "jdeigendesch@doubleslash.de",
-                                                     Url = "https://github.com/doubleSlashde/ASPNETCoreExample"
+                                                     Name = this.Configuration["contact-name"],
+                                                     Email = this.Configuration["contact-email"],
+                                                     Url = this.Configuration["contact-url"]
                                                   }
                          };
       }
