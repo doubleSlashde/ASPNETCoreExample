@@ -15,7 +15,8 @@
     "Microsoft.AspNetCore.StaticFiles": "1.1.0",
     "Swashbuckle": "6.0.0-beta902",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0"
+    "Microsoft.Extensions.Configuration.Json": "1.0.0",
+    "Microsoft.Extensions.Logging.Debug": "1.0.0"
   },
 
   "tools": {

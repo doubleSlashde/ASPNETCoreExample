@@ -6,6 +6,7 @@
 
    using Microsoft.AspNetCore.JsonPatch;
    using Microsoft.AspNetCore.Mvc;
+   using Microsoft.Extensions.Logging;
 
    using Models;
 
@@ -18,12 +19,16 @@
    public class FoodController : Controller {
       private readonly IFoodRepository foodRepository;
 
+      private readonly ILogger logger;
+
       /// <summary>
       /// Constructor
       /// </summary>
       /// <param name="foodRepository">Repository of <see cref="FoodItem"/>.</param>
-      public FoodController(IFoodRepository foodRepository) {
+      /// <param name="logger">Logger of this class.</param>
+      public FoodController(IFoodRepository foodRepository, ILogger<FoodController> logger) {
          this.foodRepository = foodRepository;
+         this.logger = logger;
       }
 
       /// <summary>
@@ -34,7 +39,7 @@
       [HttpGet]
       [ProducesResponseType(typeof(IEnumerable<FoodDto>), 200)]
       public IActionResult GetAllFoodItems() {
-         ICollection<FoodItem> foodItems = this.foodRepository.GetAll();
+         IEnumerable<FoodItem> foodItems = this.foodRepository.GetAll();
          IEnumerable<FoodDto> mappedItems = foodItems.Select(AutoMapper.Mapper.Map<FoodDto>);
 
          return this.Ok(mappedItems);
@@ -54,6 +59,7 @@
          FoodItem foodItem = this.foodRepository.GetSingle(id);
 
          if (foodItem == null) {
+            this.logger.LogWarning("Item with {ID} not found", id);
             return this.NotFound();
          }
 

@@ -66,7 +66,7 @@
       /// Get all available <see cref="FoodItem"/>.
       /// </summary>
       /// <returns>Collection of <see cref="FoodItem"/>.</returns>
-      public ICollection<FoodItem> GetAll() {
+      public IEnumerable<FoodItem> GetAll() {
          return this.storage.Values;
       }
 

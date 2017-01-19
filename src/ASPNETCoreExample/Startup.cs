@@ -71,7 +71,7 @@
       /// <param name="env"></param>
       /// <param name="loggerFactory"></param>
       public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory) {
-         loggerFactory.AddConsole();
+         loggerFactory.AddConsole(this.Configuration.GetSection("Logging")).AddDebug();
 
          if (env.IsDevelopment()) {
             // Show info about an exception if one occurs only in development environment
