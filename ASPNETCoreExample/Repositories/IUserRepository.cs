@@ -7,5 +7,7 @@
    public interface IUserRepository
    {
       Task<User> GetUserAsync(string id);
+
+      Task SetUserAsync(User user);
    }
 }

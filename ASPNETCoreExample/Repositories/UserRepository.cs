@@ -22,5 +22,11 @@
          return await this.dataDal.User.Where(item => item.Id == id)
                    .FirstAsync();
       }
+
+      public async Task SetUserAsync(User user)
+      {
+         var newUser = await this.dataDal.User.AddAsync(user);
+         await newUser.Context.SaveChangesAsync();
+      }
    }
 }
