@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASPNETCoreExample", "src\AS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDAL", "DataDAL\DataDAL.csproj", "{5989628F-5FC3-468B-A2A4-4C39E5EA6D2E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{4A7375F3-CF33-419D-ABC7-F6F7EA02D0DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{5989628F-5FC3-468B-A2A4-4C39E5EA6D2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5989628F-5FC3-468B-A2A4-4C39E5EA6D2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5989628F-5FC3-468B-A2A4-4C39E5EA6D2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A7375F3-CF33-419D-ABC7-F6F7EA02D0DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A7375F3-CF33-419D-ABC7-F6F7EA02D0DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A7375F3-CF33-419D-ABC7-F6F7EA02D0DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A7375F3-CF33-419D-ABC7-F6F7EA02D0DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,5 +38,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{56CF75C7-C267-417C-BCF6-69CEBC0BF27C} = {F7B9D11A-69C3-4AAA-B3B4-DC19B0B53D1D}
 		{5989628F-5FC3-468B-A2A4-4C39E5EA6D2E} = {F7B9D11A-69C3-4AAA-B3B4-DC19B0B53D1D}
+		{4A7375F3-CF33-419D-ABC7-F6F7EA02D0DE} = {F7B9D11A-69C3-4AAA-B3B4-DC19B0B53D1D}
 	EndGlobalSection
 EndGlobal
