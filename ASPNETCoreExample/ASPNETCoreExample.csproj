@@ -41,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DataDAL\DataDAL.csproj" />
+    <ProjectReference Include="..\DataDAL\DataDAL.csproj" />
   </ItemGroup>
 
 </Project>

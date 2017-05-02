@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\ASPNETCoreExample\ASPNETCoreExample.csproj" />
+    <ProjectReference Include="..\ASPNETCoreExample\ASPNETCoreExample.csproj" />
   </ItemGroup>
 
   <ItemGroup>
