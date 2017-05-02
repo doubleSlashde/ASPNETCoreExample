@@ -1,22 +1,19 @@
-﻿namespace ASPNETCoreExample.Controllers {
+﻿namespace ASPNETCoreExample.Controllers
+{
    using System.Collections.Generic;
    using System.Linq;
 
-   using Dtos;
+   using ASPNETCoreExample.Dtos;
+   using ASPNETCoreExample.Models;
+   using ASPNETCoreExample.Repositories;
 
    using Microsoft.AspNetCore.JsonPatch;
    using Microsoft.AspNetCore.Mvc;
    using Microsoft.Extensions.Logging;
 
-   using Models;
-
-   using Repositories;
-
-   /// <summary>
-   /// Controller of <see cref="IFoodRepository"/>.
-   /// </summary>
    [Route("api/[controller]")]
-   public class FoodController : Controller {
+   public class FoodController : Controller
+   {
       private readonly IFoodRepository foodRepository;
 
       private readonly ILogger logger;
@@ -26,7 +23,8 @@
       /// </summary>
       /// <param name="foodRepository">Repository of <see cref="FoodItem"/>.</param>
       /// <param name="logger">Logger of this class.</param>
-      public FoodController(IFoodRepository foodRepository, ILogger<FoodController> logger) {
+      public FoodController(IFoodRepository foodRepository, ILogger<FoodController> logger)
+      {
          this.foodRepository = foodRepository;
          this.logger = logger;
       }
@@ -38,7 +36,8 @@
       /// <response code="200">Returns all items of food.</response>
       [HttpGet]
       [ProducesResponseType(typeof(IEnumerable<FoodDto>), 200)]
-      public IActionResult GetAllFoodItems() {
+      public IActionResult GetAllFoodItems()
+      {
          IEnumerable<FoodItem> foodItems = this.foodRepository.GetAll();
          IEnumerable<FoodDto> mappedItems = foodItems.Select(AutoMapper.Mapper.Map<FoodDto>);
 
@@ -55,10 +54,12 @@
       [HttpGet("{id:int}", Name = "GetSingleFoodItem")]
       [ProducesResponseType(typeof(FoodDto), 404)]
       [ProducesResponseType(typeof(FoodDto), 200)]
-      public IActionResult GetSingleFoodItem(int id) {
+      public IActionResult GetSingleFoodItem(int id)
+      {
          FoodItem foodItem = this.foodRepository.GetSingle(id);
 
-         if (foodItem == null) {
+         if (foodItem == null)
+         {
             this.logger.LogWarning("Item with {ID} not found", id);
             return this.NotFound();
          }
@@ -76,23 +77,21 @@
       [HttpPost]
       [ProducesResponseType(typeof(FoodDto), 400)]
       [ProducesResponseType(typeof(FoodDto), 201)]
-      public IActionResult AddNewFoodItem([FromBody] FoodDto foodDto) {
-         if (foodDto == null) {
+      public IActionResult AddNewFoodItem([FromBody] FoodDto foodDto)
+      {
+         if (foodDto == null)
+         {
             return this.BadRequest();
          }
 
-         if (!this.ModelState.IsValid) {
+         if (!this.ModelState.IsValid)
+         {
             return this.BadRequest(this.ModelState);
          }
 
          FoodItem foodItem = this.foodRepository.Add(AutoMapper.Mapper.Map<FoodItem>(foodDto));
 
-         return this.CreatedAtRoute(
-                                    "GetSingleFoodItem",
-                                    new {
-                                           id = foodItem.Id
-                                        },
-                                    AutoMapper.Mapper.Map<FoodDto>(foodItem));
+         return this.CreatedAtRoute("GetSingleFoodItem", new { id = foodItem.Id }, AutoMapper.Mapper.Map<FoodDto>(foodItem));
       }
 
       /// <summary>
@@ -108,17 +107,21 @@
       [ProducesResponseType(typeof(FoodDto), 404)]
       [ProducesResponseType(typeof(FoodDto), 400)]
       [ProducesResponseType(typeof(FoodDto), 200)]
-      public IActionResult UpdateFoodItem(int id, [FromBody] FoodDto foodDto) {
+      public IActionResult UpdateFoodItem(int id, [FromBody] FoodDto foodDto)
+      {
          var foodItemToCheck = this.foodRepository.GetSingle(id);
-         if (foodItemToCheck == null) {
+         if (foodItemToCheck == null)
+         {
             return this.NotFound();
          }
 
-         if (id != foodDto.Id) {
+         if (id != foodDto.Id)
+         {
             return this.BadRequest("Ids do not match!");
          }
 
-         if (!this.ModelState.IsValid) {
+         if (!this.ModelState.IsValid)
+         {
             return this.BadRequest(this.ModelState);
          }
 
@@ -139,20 +142,24 @@
       [ProducesResponseType(typeof(FoodDto), 400)]
       [ProducesResponseType(typeof(FoodDto), 404)]
       [ProducesResponseType(typeof(FoodDto), 200)]
-      public IActionResult PartialUpdate(int id, [FromBody] JsonPatchDocument<FoodDto> foodDtoPatchDoc) {
-         if (foodDtoPatchDoc == null) {
+      public IActionResult PartialUpdate(int id, [FromBody] JsonPatchDocument<FoodDto> foodDtoPatchDoc)
+      {
+         if (foodDtoPatchDoc == null)
+         {
             return this.BadRequest();
          }
 
          var foodItemExistingEntity = this.foodRepository.GetSingle(id);
-         if (foodItemExistingEntity == null) {
+         if (foodItemExistingEntity == null)
+         {
             return this.NotFound();
          }
 
          FoodDto foodDto = AutoMapper.Mapper.Map<FoodDto>(foodItemExistingEntity);
          foodDtoPatchDoc.ApplyTo(foodDto, this.ModelState);
 
-         if (!this.ModelState.IsValid) {
+         if (!this.ModelState.IsValid)
+         {
             return this.BadRequest(this.ModelState);
          }
 
@@ -170,9 +177,11 @@
       [HttpDelete("{id:int}")]
       [ProducesResponseType(typeof(FoodDto), 404)]
       [ProducesResponseType(typeof(FoodDto), 204)]
-      public IActionResult Remove(int id) {
+      public IActionResult Remove(int id)
+      {
          var foodItem = this.foodRepository.GetSingle(id);
-         if (foodItem == null) {
+         if (foodItem == null)
+         {
             return this.NotFound();
          }
 
